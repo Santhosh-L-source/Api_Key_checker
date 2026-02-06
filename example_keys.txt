@@ -1,0 +1,7 @@
+# Example API keys file for batch testing
+# Add your API keys here, one per line
+# This file is for testing purposes only
+
+# sk-your-openai-key-here
+# ghp_your-github-token-here
+# AIza-your-google-api-key-here

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔑 API Key Checker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔑 API Key Checker</h1>
+            <p class="subtitle">Validate and test your API keys instantly</p>
+        </header>
+
+        <main>
+            <!-- Mode Selection -->
+            <div class="mode-selector">
+                <button class="mode-btn active" data-mode="single">Single Key</button>
+                <button class="mode-btn" data-mode="batch">Batch Upload</button>
+            </div>
+
+            <!-- Single Key Mode -->
+            <div id="single-mode" class="mode-content active">
+                <div class="input-group">
+                    <label for="api-type">API Type:</label>
+                    <select id="api-type">
+                        <option value="">-- Select API Provider --</option>
+                        <optgroup label="AI Models">
+                            <option value="openai">OpenAI</option>
+                            <option value="claude">Claude (Anthropic)</option>
+                            <option value="gemini">Google Gemini</option>
+                            <option value="grok">Grok (xAI)</option>
+                            <option value="cohere">Cohere</option>
+                            <option value="perplexity">Perplexity</option>
+                            <option value="replicate">Replicate</option>
+                            <option value="togetherai">Together AI</option>
+                            <option value="huggingface">Hugging Face</option>
+                        </optgroup>
+                        <optgroup label="Other Services">
+                            <option value="github">GitHub</option>
+                            <option value="google">Google Cloud</option>
+                            <option value="aws">AWS</option>
+                        </optgroup>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="api-key">API Key:</label>
+                    <input type="password" id="api-key" placeholder="Paste your API key here..." />
+                    <button class="toggle-password" onclick="togglePassword()">👁️</button>
+                </div>
+
+                <button class="btn-primary" onclick="validateSingleKey()">
+                    <span class="loader hidden"></span> Validate Key
+                </button>
+
+                <div id="result-single" class="result-box hidden"></div>
+            </div>
+
+            <!-- Batch Mode -->
+            <div id="batch-mode" class="mode-content">
+                <div class="input-group">
+                    <label for="batch-api-type">API Type:</label>
+                    <select id="batch-api-type">
+                        <option value="">-- Select API Provider --</option>
+                        <optgroup label="AI Models">
+                            <option value="openai">OpenAI</option>
+                            <option value="claude">Claude (Anthropic)</option>
+                            <option value="gemini">Google Gemini</option>
+                            <option value="grok">Grok (xAI)</option>
+                            <option value="cohere">Cohere</option>
+                            <option value="perplexity">Perplexity</option>
+                            <option value="replicate">Replicate</option>
+                            <option value="togetherai">Together AI</option>
+                            <option value="huggingface">Hugging Face</option>
+                        </optgroup>
+                        <optgroup label="Other Services">
+                            <option value="github">GitHub</option>
+                            <option value="google">Google Cloud</option>
+                            <option value="aws">AWS</option>
+                        </optgroup>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="batch-keys">API Keys (one per line):</label>
+                    <textarea id="batch-keys" placeholder="Paste your API keys here, one per line..."></textarea>
+                </div>
+
+                <button class="btn-primary" onclick="validateBatchKeys()">
+                    <span class="loader hidden"></span> Validate All
+                </button>
+
+                <div id="result-batch" class="result-box hidden"></div>
+            </div>
+
+            <!-- Info Section -->
+            <div class="info-section">
+                <h3>ℹ️ Supported AI Providers</h3>
+                <div class="providers-grid">
+                    <div class="provider-card">
+                        <h4>🤖 OpenAI</h4>
+                        <p>Format: <code>sk-*</code></p>
+                    </div>
+                    <div class="provider-card">
+                        <h4>🧠 Claude</h4>
+                        <p>Format: <code>sk-ant-*</code></p>
+                    </div>
+                    <div class="provider-card">
+                        <h4>✨ Gemini</h4>
+                        <p>Format: <code>AIza*</code></p>
+                    </div>
+                    <div class="provider-card">
+                        <h4>⚡ Grok</h4>
+                        <p>Format: <code>xai-*</code></p>
+                    </div>
+                    <div class="provider-card">
+                        <h4>🔤 Cohere</h4>
+                        <p>Format: <code>[a-z0-9-]{36}</code></p>
+                    </div>
+                    <div class="provider-card">
+                        <h4>🔍 Perplexity</h4>
+                        <p>Format: <code>pplx-*</code></p>
+                    </div>
+                    <div class="provider-card">
+                        <h4>🎨 Replicate</h4>
+                        <p>Format: <code>[a-z0-9]{40}</code></p>
+                    </div>
+                    <div class="provider-card">
+                        <h4>🤝 Together AI</h4>
+                        <p>Format: <code>[a-z0-9]{40}</code></p>
+                    </div>
+                    <div class="provider-card">
+                        <h4>🤗 Hugging Face</h4>
+                        <p>Format: <code>hf_*</code></p>
+                    </div>
+                    <div class="provider-card">
+                        <h4>🐙 GitHub</h4>
+                        <p>Format: <code>ghp_*</code></p>
+                    </div>
+                    <div class="provider-card">
+                        <h4>☁️ Google Cloud</h4>
+                        <p>Format: <code>AIza*</code></p>
+                    </div>
+                    <div class="provider-card">
+                        <h4>📦 AWS</h4>
+                        <p>Format: <code>AKIA*</code></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Safety Info -->
+            <div class="safety-info">
+                <h3>🔒 Security & Privacy</h3>
+                <ul>
+                    <li>✅ Keys are validated locally and not stored</li>
+                    <li>✅ No logging of sensitive information</li>
+                    <li>✅ Results are temporary and cleared when you leave</li>
+                    <li>✅ Only used to verify key validity</li>
+                </ul>
+            </div>
+        </main>
+
+        <footer>
+            <p>🔑 API Key Checker | Built with Flask | Keep your keys safe</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
